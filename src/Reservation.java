@@ -1,10 +1,16 @@
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
+
+import static sun.security.krb5.Config.duration;
 
 public class Reservation {
     private int roomNumber;
     private Date checkin;
     private Date checkout;
+
+    private static SimpleDateFormat sdf = new SimpleDateFormat("ddMM/yyyy");
 
     public Reservation(int roomNumber, Date checkin, Date checkout) {
         this.roomNumber = roomNumber;
@@ -36,12 +42,23 @@ public class Reservation {
         this.checkout = checkout;
     }
 
-    public int Duration() {
-        return 0;
+    public long duration() {
+        long diff = checkin.getTime() - checkout.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     public void updateDates(Date checkin, Date checkout) {
         checkin = this.checkin;
         checkout = this.checkout;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation {" +
+                "roomNumber=" + roomNumber +
+                ", checkin=" + sdf.format(checkin) +
+                ", checkout=" + sdf.format(checkout) +
+                ", duration=" + duration() + " (days)" +
+                '}';
     }
 }

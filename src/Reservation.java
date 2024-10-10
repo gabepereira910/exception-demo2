@@ -3,14 +3,12 @@ import java.util.Date;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
-import static sun.security.krb5.Config.duration;
-
 public class Reservation {
     private int roomNumber;
     private Date checkin;
     private Date checkout;
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("ddMM/yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public Reservation(int roomNumber, Date checkin, Date checkout) {
         this.roomNumber = roomNumber;
@@ -48,6 +46,13 @@ public class Reservation {
     }
 
     public void updateDates(Date checkin, Date checkout) {
+        Date now = new Date();
+        if (checkin.before(now) || checkout.before(now)) {
+            throw new IllegalArgumentException("Reservation dates must be future dates");
+        }
+        if (!checkout.after(checkin)) {
+            throw new IllegalArgumentException("Checkout must be after Checkin");
+        }
         checkin = this.checkin;
         checkout = this.checkout;
     }
